@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Finance Tracker</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fcf8f2;
+      color: #444;
+    }
+    h1, h2, h3 {
+      font-family: 'Verdana', sans-serif;
+    }
+    header {
+      background: linear-gradient(45deg, #FF5722, #BF360C);
+      color: white;
+      padding: 1.5em;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    /* Card Styles */
+    .card-container {
+      display: flex;
+      gap: 15px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .card {
+      flex: 1;
+      min-width: 150px;
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .card h3 {
+      margin-bottom: 10px;
+      color: #FF5722;
+    }
+    .card p {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin: 0;
+    }
+    /* Form Styles */
+    form {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 20px;
+    }
+    form label {
+      display: block;
+      margin: 15px 0;
+      font-weight: bold;
+      color: #333;
+    }
+    form select, form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    form textarea {
+      display: none;
+      resize: none;
+    }
+    form button {
+      background: linear-gradient(45deg, #FF5722, #BF360C);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1em;
+      width: 100%;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    form button:hover {
+      background: linear-gradient(45deg, #BF360C, #FF5722);
+    }
+    /* History Table Styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #FF5722;
+      color: white;
+    }
+    /* Download Button Styles */
+    .download-btn {
+      background: linear-gradient(45deg, #4CAF50, #2E7D32);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      display: block;
+      width: 100%;
+    }
+    .download-btn:hover {
+      background: linear-gradient(45deg, #2E7D32, #4CAF50);
+    }
+    /* Reset Button Styles */
+    .reset-btn {
+      background: linear-gradient(45deg, #F44336, #D32F2F);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      display: block;
+      width: 100%;
+    }
+    .reset-btn:hover {
+      background: linear-gradient(45deg, #D32F2F, #F44336);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Personal Finance Tracker</h1>
+    <nav>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#add-transaction">Add Transaction</a>
+      <a href="#history">Transaction History</a>
+    </nav>
+  </header>
+  <main>
+    <!-- Dashboard Section -->
+    <section id="dashboard">
+      <h2>Dashboard</h2>
+      <div class="card-container">
+        <div class="card">
+          <h3>Total Income</h3>
+          <p id="income">₹0</p>
+        </div>
+        <div class="card">
+          <h3>Total Expenses</h3>
+          <p id="expenses">₹0</p>
+        </div>
+        <div class="card">
+          <h3>Savings</h3>
+          <p id="savings">₹0</p>
+        </div>
+      </div>
+    </section>
+    <!-- Add Transaction Section -->
+    <section id="add-transaction">
+      <h2>Add Transaction</h2>
+      <form id="transaction-form">
+        <label>
+          Type:
+          <select id="type">
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+        </label>
+        <label>
+          Amount:
+          <input type="number" id="amount" required>
+        </label>
+        <label id="reason-label">
+          Reason for Expense:
+          <textarea id="reason" rows="3" placeholder="E.g., groceries, rent, etc."></textarea>
+        </label>
+        <button type="submit">Add Transaction</button>
+      </form>
+      <button class="reset-btn" onclick="resetData()">Reset All</button>
+    </section>
+    <!-- Transaction History Section -->
+    <section id="history">
+      <h2>Transaction History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody id="history-table">
+          <!-- History rows will be dynamically added here -->
+        </tbody>
+      </table>
+      <button class="download-btn" onclick="downloadCSV()">Download Receipt</button>
+    </section>
+  </main>
+  <script>
+    let totalIncome = 0;
+    let totalExpenses = 0;
+
+    document.getElementById("type").addEventListener("change", function () {
+      const reasonField = document.getElementById("reason");
+      reasonField.style.display = this.value === "expense" ? "block" : "none";
+    });
+
+    document.getElementById("transaction-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const type = document.getElementById("type").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      const reason = type === "expense" ? document.getElementById("reason").value.trim() : "N/A";
+
+      if (type === "income") {
+        totalIncome += amount;
+      } else {
+        totalExpenses += amount;
+      }
+
+      addToHistory(type, amount, reason);
+      updateDashboard();
+      saveData();
+
+      this.reset();
+      document.getElementById("reason").style.display = "none";
+    });
+
+    function updateDashboard() {
+      document.getElementById("income").textContent = `₹${totalIncome}`;
+      document.getElementById("expenses").textContent = `₹${totalExpenses}`;
+      document.getElementById("savings").textContent = `₹${totalIncome - totalExpenses}`;
+    }
+
+    function addToHistory(type, amount, reason) {
+      const table = document.getElementById("history-table");
+      const row = table.insertRow();
+      row.insertCell(0).textContent = type;
+      row.insertCell(1).textContent = `₹${amount}`;
+      row.insertCell(2).textContent = reason;
+    }
+
+    function saveData() {
+      const data = {
+        totalIncome,
+        totalExpenses,
+        history: Array.from(document.querySelectorAll("#history-table tr")).map(row => {
+          const cells = row.querySelectorAll("td");
+          return cells.length ? {
+            type: cells[0].textContent,
+            amount: cells[1].textContent,
+            reason: cells[2].textContent
+          } : null;
+        }).filter(Boolean)
+      };
+      localStorage.setItem("financeData", JSON.stringify(data));
+    }
+
+    function loadData() {
+      const data = JSON.parse(localStorage.getItem("financeData"));
+      if (data) {
+        totalIncome = data.totalIncome || 0;
+        totalExpenses = data.totalExpenses || 0;
+        updateDashboard();
+
+        data.history.forEach(entry => {
+          addToHistory(entry.type, parseFloat(entry.amount.replace('₹', '')), entry.reason);
+        });
+      }
+    }
+
+    function downloadCSV() {
+      const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+      let csvContent = "data:text/csv;charset=utf-8,Type,Amount,Reason\n";
+
+      transactions.forEach(({ type, amount, reason }) => {
+        csvContent += `${type},${amount},${reason}\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "receipt.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function resetData() {
+      totalIncome = 0;
+      totalExpenses = 0;
+      document.getElementById("income").textContent = "₹0";
+      document.getElementById("expenses").textContent = "₹0";
+      document.getElementById("savings").textContent = "₹0";
+
+      // Clear history table
+      const table = document.getElementById("history-table");
+      while (table.rows.length) {
+        table.deleteRow(0);
+      }
+
+      // Clear localStorage
+      localStorage.removeItem("financeData");
+    }
+
+    window.addEventListener("load", loadData);
+  </script>
+</body>
+</html>
